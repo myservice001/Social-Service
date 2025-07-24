@@ -6,9 +6,7 @@
   <title>Register</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -37,16 +35,13 @@
       color: #333;
     }
 
-    .card input[type="text"],
-    .card input[type="email"],
-    .card input[type="password"] {
+    .card input {
       width: 100%;
-      padding: 12px 16px; /* ✅ Padding যুক্ত */
+      padding: 12px 16px;
       margin-bottom: 14px;
       border: 1px solid #ccc;
       border-radius: 6px;
       font-size: 16px;
-      box-sizing: border-box;
     }
 
     .card button {
@@ -65,20 +60,27 @@
       background-color: #3b5ba1;
     }
 
-    .card .footer-text {
+    .footer-text {
       text-align: center;
       margin-top: 18px;
       font-size: 14px;
     }
 
-    .card .footer-text a {
+    .footer-text a {
       color: #007bff;
       text-decoration: none;
       font-weight: bold;
     }
 
-    .card .footer-text a:hover {
+    .footer-text a:hover {
       text-decoration: underline;
+    }
+
+    .error {
+      color: red;
+      text-align: center;
+      margin-bottom: 10px;
+      font-size: 14px;
     }
   </style>
 </head>
@@ -86,9 +88,10 @@
   <div class="card">
     <h2>Create Account</h2>
     <form id="registerForm">
-      <input type="text" placeholder="Full Name" required />
-      <input type="email" placeholder="Email Address" required />
-      <input type="password" placeholder="Password" required />
+      <input type="text" id="name" placeholder="Full Name" required />
+      <input type="email" id="email" placeholder="Email Address" required />
+      <input type="password" id="password" placeholder="Password" required />
+      <div class="error" id="errorMsg"></div>
       <button type="submit">Register</button>
     </form>
     <div class="footer-text">
@@ -96,5 +99,34 @@
       <a href="login.html">Login</a>
     </div>
   </div>
+
+  <!-- ✅ Firebase CDN -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+
+  <!-- ✅ Import firebase-config.js -->
+  <script src="firebase-config.js"></script>
+
+  <!-- ✅ Registration Logic -->
+  <script>
+    const registerForm = document.getElementById("registerForm");
+    const errorMsg = document.getElementById("errorMsg");
+
+    registerForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      firebase.auth().createUserWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+          // Registration successful
+          window.location.href = "dashboard.html";
+        })
+        .catch((error) => {
+          errorMsg.textContent = error.message;
+        });
+    });
+  </script>
 </body>
 </html>

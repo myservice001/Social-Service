@@ -6,12 +6,16 @@
   <title>Register</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
-      padding: 0;
+      padding: 16px; /* ✅ Added padding around body */
       font-family: 'Roboto', sans-serif;
       background: linear-gradient(135deg, #667eea, #764ba2);
-      height: 100vh;
+      min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -20,11 +24,11 @@
     .card {
       background-color: white;
       padding: 25px;
-      border-radius: 10px;
+      border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
       width: 100%;
       max-width: 380px;
-      margin: 16px;
+      margin: auto;
     }
 
     .card h2 {

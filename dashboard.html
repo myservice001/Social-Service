@@ -116,31 +116,116 @@
       cursor: pointer;
       margin-top: 10px;
     }
+
+    /* ✅ Header Profile & Menu */
+    .header-bar {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      right: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .profile-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .profile-container img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .change-text {
+      font-size: 14px;
+      color: #4f46e5;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    #menuToggle {
+      font-size: 26px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      color: #4f46e5;
+    }
+
+    #menuPopup {
+      position: absolute;
+      top: 70px;
+      right: 20px;
+      background: white;
+      padding: 14px 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      display: none;
+      z-index: 1000;
+      min-width: 180px;
+    }
+
+    #menuPopup a {
+      display: block;
+      padding: 8px 0;
+      font-size: 15px;
+      white-space: nowrap;
+      text-decoration: none;
+      color: #333;
+      font-weight: 500;
+    }
+
+    #menuPopup a:hover {
+      color: #4f46e5;
+    }
   </style>
 </head>
 <body>
 
+  <!-- ✅ Profile & Menu Bar -->
+  <div class="header-bar">
+    <div class="profile-container">
+      <img src="default-profile.png" id="profileImage" alt="Profile" />
+      <input type="file" id="profileImageInput" accept="image/*" style="display: none" onchange="changeProfileImage(event)">
+      <label for="profileImageInput" class="change-text">Change</label>
+    </div>
+    <button id="menuToggle">☰</button>
+    <div id="menuPopup">
+      <a href="#">Refer & Earn</a>
+      <a href="#">Join Telegram</a>
+      <a href="#">Contact Us</a>
+      <a href="#" onclick="logout()">Logout</a>
+    </div>
+  </div>
+
+  <!-- ✅ Main Card -->
   <div class="card">
     <h1>Instagram Services</h1>
     <button class="btn" onclick="openPopup('like')">Likes</button>
     <button class="btn" onclick="openPopup('follower')">Followers</button>
   </div>
 
-  <!-- Payment Popup -->
+  <!-- ✅ Payment Popup -->
   <div id="paymentPopup">
     <div class="popup-content">
       <h3 id="popupTitle">Service</h3>
-      <input type="number" id="quantityInput" placeholder="Enter quantity"/>
-      <input type="url" id="linkInput" placeholder="Paste Link Here"/>
+      <input type="number" id="quantityInput" placeholder="Enter quantity" />
+      <input type="url" id="linkInput" placeholder="Paste Link Here" />
       <div class="price" id="priceDisplay">₹0</div>
       <button class="btn" onclick="startPayment()">Pay Now</button>
       <button class="close-btn" onclick="closePopup()">Close</button>
     </div>
   </div>
 
+  <!-- ✅ Scripts -->
   <script>
-    const PRICE_PER_LIKE = 0.05;
-    const PRICE_PER_FOLLOWER = 0.3;
+    const PRICE_PER_LIKE = 0.5;
+    const PRICE_PER_FOLLOWER = 1;
     let currentService = "like";
 
     function openPopup(service) {
@@ -150,11 +235,11 @@
       document.getElementById('quantityInput').value = '';
       document.getElementById('linkInput').value = '';
       document.getElementById('priceDisplay').innerText = '₹0';
-      
+
       document.getElementById('quantityInput').placeholder =
         service === 'like' ? 'Enter quantity (Minimum 20)' : 'Enter quantity (Minimum 10)';
       document.getElementById('linkInput').placeholder =
-        service === 'like' ? 'Enter Instagram Post/Reel URL' : 'Enter Instagram Profile URL';
+        service === 'like' ? 'Instagram Post/Reel URL' : 'Instagram Profile URL';
 
       document.getElementById('paymentPopup').style.display = 'flex';
     }
@@ -226,9 +311,36 @@
       const rzp = new Razorpay(options);
       rzp.open();
     }
+
+    // ✅ Profile Change Script
+    function changeProfileImage(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const imageURL = URL.createObjectURL(file);
+        document.getElementById("profileImage").src = imageURL;
+      }
+    }
+
+    // ✅ Toggle Menu
+    const menuBtn = document.getElementById("menuToggle");
+    const menuPopup = document.getElementById("menuPopup");
+    menuBtn.addEventListener("click", () => {
+      menuPopup.style.display = menuPopup.style.display === "block" ? "none" : "block";
+    });
+    window.addEventListener("click", function (e) {
+      if (!menuBtn.contains(e.target) && !menuPopup.contains(e.target)) {
+        menuPopup.style.display = "none";
+      }
+    });
+
+    function logout() {
+      firebase.auth().signOut().then(() => {
+        window.location.href = "login.html";
+      });
+    }
   </script>
 
-  <!-- ✅ Firebase Auth Check Scripts -->
+  <!-- ✅ Firebase Auth Check -->
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
   <script src="firebase-config.js"></script>

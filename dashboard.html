@@ -207,7 +207,7 @@
       }
 
       const options = {
-        key: "rzp_live_LP8G76UtuvGoKE", // ✅ আপনার Razorpay লাইভ API কী
+        key: "rzp_live_LP8G76UtuvGoKE",
         amount: Math.round(price * 100),
         currency: "INR",
         name: "Social Boost",
@@ -226,6 +226,19 @@
       const rzp = new Razorpay(options);
       rzp.open();
     }
+  </script>
+
+  <!-- ✅ Firebase Auth Check Scripts -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="firebase-config.js"></script>
+
+  <script>
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (!user) {
+        window.location.href = "login.html";
+      }
+    });
   </script>
 
 </body>

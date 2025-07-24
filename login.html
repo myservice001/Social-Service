@@ -4,82 +4,128 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', sans-serif;
-    }
+    * { box-sizing: border-box; }
+
     body {
+      margin: 0;
+      padding: 16px;
+      font-family: 'Roboto', sans-serif;
       background: linear-gradient(135deg, #667eea, #764ba2);
+      min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      padding: 20px;
     }
+
     .card {
-      background-color: #ffffff;
+      background-color: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
       width: 100%;
-      max-width: 400px;
-      padding: 30px 25px;
-      border-radius: 16px;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+      max-width: 380px;
+      margin: auto;
     }
-    h2 {
+
+    .card h2 {
       text-align: center;
-      margin-bottom: 25px;
+      margin-bottom: 24px;
       color: #333;
     }
-    input {
+
+    .card input {
       width: 100%;
-      padding: 12px;
-      margin: 10px 0;
+      padding: 12px 16px;
+      margin-bottom: 14px;
       border: 1px solid #ccc;
-      border-radius: 8px;
+      border-radius: 6px;
       font-size: 16px;
     }
-    button {
+
+    .card button {
       width: 100%;
       padding: 12px;
-      background-color: #1e90ff;
-      border: none;
+      background-color: #4a69bd;
       color: white;
+      border: none;
+      border-radius: 6px;
       font-size: 16px;
-      border-radius: 8px;
       cursor: pointer;
-      transition: background 0.3s ease;
+      margin-top: 10px;
     }
-    button:hover {
-      background-color: #0066cc;
+
+    .card button:hover {
+      background-color: #3b5ba1;
     }
-    .switch {
+
+    .footer-text {
       text-align: center;
-      margin-top: 15px;
+      margin-top: 18px;
       font-size: 14px;
     }
-    .switch a {
-      color: #1e90ff;
+
+    .footer-text a {
+      color: #007bff;
       text-decoration: none;
-      font-weight: 500;
+      font-weight: bold;
     }
-    .switch a:hover {
+
+    .footer-text a:hover {
       text-decoration: underline;
+    }
+
+    .error {
+      color: red;
+      text-align: center;
+      margin-bottom: 10px;
+      font-size: 14px;
     }
   </style>
 </head>
 <body>
   <div class="card">
     <h2>Login</h2>
-    <form action="dashboard.html" method="POST">
-      <input type="email" placeholder="Email" required />
-      <input type="password" placeholder="Password" required />
+    <form id="loginForm">
+      <input type="email" id="email" placeholder="Email Address" required />
+      <input type="password" id="password" placeholder="Password" required />
+      <div class="error" id="errorMsg"></div>
       <button type="submit">Login</button>
     </form>
-    <div class="switch">
-      Don't have an account? <a href="register.html">Register</a>
+    <div class="footer-text">
+      Don't have an account?
+      <a href="register.html">Register</a>
     </div>
   </div>
+
+  <!-- ✅ Firebase Scripts -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+
+  <!-- ✅ Firebase Config File -->
+  <script src="firebase-config.js"></script>
+
+  <!-- ✅ Login Logic -->
+  <script>
+    const loginForm = document.getElementById("loginForm");
+    const errorMsg = document.getElementById("errorMsg");
+
+    loginForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      firebase.auth().signInWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+          // Login successful
+          window.location.href = "dashboard.html";
+        })
+        .catch((error) => {
+          errorMsg.textContent = error.message;
+        });
+    });
+  </script>
 </body>
 </html>
